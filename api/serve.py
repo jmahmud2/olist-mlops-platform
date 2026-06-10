@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from typing import List, Optional
 import pandas as pd
@@ -11,7 +12,13 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.serving.langgraph_support import build_support_graph
 
-app = FastAPI(title="E-Commerce AI Platform", version="1.0.0")
+app = FastAPI(
+    title="E-Commerce AI Platform",
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json"
+)
 
 # Load model
 model = None
@@ -55,6 +62,21 @@ async def load_model():
 
 # Initialize LangGraph
 support_graph = build_support_graph()
+
+@app.get("/")
+async def root():
+    return {
+        "message": "E-Commerce AI Platform",
+        "version": "1.0.0",
+        "endpoints": {
+            "health": "/health",
+            "info": "/info",
+            "support": "/support (POST)",
+            "forecast": "/forecast/daily (POST)",
+            "docs": "/docs",
+            "redoc": "/redoc"
+        }
+    }
 
 @app.get("/health")
 async def health():
@@ -105,7 +127,7 @@ async def info():
     return {
         "name": "E-Commerce AI Platform",
         "version": "1.0.0",
-        "endpoints": ["/health", "/forecast/daily", "/support", "/info"],
+        "endpoints": ["/", "/health", "/forecast/daily", "/support", "/info", "/docs", "/redoc"],
         "model_ready": model is not None
     }
 
