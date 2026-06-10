@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.serving.langgraph_support import build_support_graph
 
 app = FastAPI(
-    title="E-Commerce AI Platform",
+    title="Olist MLOps Platform",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
@@ -66,7 +66,7 @@ support_graph = build_support_graph()
 @app.get("/")
 async def root():
     return {
-        "message": "E-Commerce AI Platform",
+        "message": "Olist MLOps Platform",
         "version": "1.0.0",
         "endpoints": {
             "health": "/health",
@@ -125,7 +125,7 @@ async def customer_support(request: SupportRequest):
 @app.get("/info")
 async def info():
     return {
-        "name": "E-Commerce AI Platform",
+        "name": "Olist MLOps Platform",
         "version": "1.0.0",
         "endpoints": ["/", "/health", "/forecast/daily", "/support", "/info", "/docs", "/redoc"],
         "model_ready": model is not None
