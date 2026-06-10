@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: ecommerce-ai-platform
+    runtime: python
+    repo: https://github.com/jmahmud2/ecommerce-ai-platform
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn api.serve:app --host 0.0.0.0 --port 10000
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.10
