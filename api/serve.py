@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from typing import List, Optional
@@ -18,6 +19,19 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
     openapi_url="/openapi.json"
+)
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://olist-mlops-dashboard.onrender.com",
+        "http://localhost:5173",
+        "http://localhost:3000"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Load model
@@ -46,7 +60,7 @@ async def load_model():
     global model
     try:
         client = mlflow.tracking.MlflowClient()
-        experiment = mlflow.get_experiment_by_name("ecommerce_demand")
+        experiment = mlflow.get_experiment_by_name("olist_demand_forecasting")
         if experiment:
             runs = client.search_runs(experiment.experiment_id, order_by=["metrics.rmse ASC"])
             if runs:
